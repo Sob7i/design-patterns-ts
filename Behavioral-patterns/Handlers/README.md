@@ -1,1 +1,1 @@
-# The handlers (the chain of responsibilities) pattern
+# The handlers (chain of responsibilities) pattern
