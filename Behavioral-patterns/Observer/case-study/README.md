@@ -1,1 +1,1 @@
-React global managemet system implementing the observer (sub / pub) pattern 
+# React global managemet system implementing the observer (sub / pub) pattern 
