@@ -40,4 +40,3 @@ for (const name of fs.readdirSync('./files')) {
 
   console.log(`${name}: ${JSON.stringify(output)}`)
 }
-

@@ -17,24 +17,24 @@ function createSubscribable<MessageType>() {
   }
 }
 
-export default function createStateHook<DataType>(
+export default function createGlobalStateHook<DataType>(
   initialValue: DataType,
 ): () => [DataType, (v: DataType) => void] {
-  const subscriber = createSubscribable<DataType>()
+  const subscribable = createSubscribable<DataType>()
 
   return () => {
     const [value, setValue] = useState<DataType>(initialValue)
 
-    useEffect(() => subscriber.subscribe(setValue), [])
+    useEffect(() => subscribable.subscribe(setValue), [])
 
     return [
       value,
       (v: DataType) => {
         setValue(v)
-        subscriber.publish(v)
+        subscribable.publish(v)
       },
     ]
   }
 }
 
-export const useCounter = createStateHook(0)
+export const useCounter = createGlobalStateHook(0)
