@@ -1,6 +1,5 @@
 import fetch from 'node-fetch'
 
-export const api = 'https://pokeapi.co/api/v2/pokemon/'
 
 class VisitAllPages<DataType> {
   constructor(private baseUrl: string) {}
@@ -25,11 +24,8 @@ interface Pokemon {
   url: string
 }
 
-const visitor = new VisitAllPages<Pokemon>(api)
+const visitor = new VisitAllPages<Pokemon>('https://pokeapi.co/api/v2/pokemon/')
 
-const visitApiPages = visitor.visit((results) => {
+visitor.visit((results) => {
   console.log(results)
 })
-
-// ! uncomment this line to run it 
-// console.log(`visitApiPages`, visitApiPages)

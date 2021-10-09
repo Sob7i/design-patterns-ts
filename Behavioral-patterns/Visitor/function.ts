@@ -1,5 +1,4 @@
 import fetch from 'node-fetch'
-import { api } from './class'
 
 async function visit<DataType>(
   baseUrl: string,
@@ -23,9 +22,11 @@ interface Pokemon {
   url: string
 }
 
-const visitApiPages = visit<Pokemon[]>(api, (results) => {
-  console.log(results)
-})
+const visitApiPages = visit<Pokemon[]>(
+  'https://pokeapi.co/api/v2/pokemon/',
+  (results) => {
+    console.log(results)
+  },
+)
 
-// ! uncomment this line to run it 
-// console.log(`visitApiPages`, visitApiPages)
+console.log(`visitApiPages`, visitApiPages)
