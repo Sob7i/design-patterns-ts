@@ -25,7 +25,17 @@ interface Pokemon {
   url: string
 }
 
-(async function (): Promise<void> {
+;(async function (): Promise<void> {
+  /* Get each result at a time */
+  const results = iterateApiPages<Pokemon>('https://pokeapi.co/api/v2/pokemon/')
+
+  const nextResult = (await results.next()).done
+  console.log(`nextResult`, nextResult)
+
+  const nextResult2 = (await results.next()).value
+  console.log(`nextResult2`, nextResult2)
+
+  /* Or iterate through the results */
   for await (const result of iterateApiPages<Pokemon>(
     'https://pokeapi.co/api/v2/pokemon/',
   )) {

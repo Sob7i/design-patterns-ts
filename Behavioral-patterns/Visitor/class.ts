@@ -1,6 +1,5 @@
 import fetch from 'node-fetch'
 
-
 class VisitAllPages<DataType> {
   constructor(private baseUrl: string) {}
 
