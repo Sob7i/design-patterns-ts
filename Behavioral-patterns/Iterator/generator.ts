@@ -29,11 +29,12 @@ interface Pokemon {
   /* Get each result at a time */
   const results = iterateApiPages<Pokemon>('https://pokeapi.co/api/v2/pokemon/')
 
-  const nextResult = (await results.next()).done
+  const nextResult = (await results.next()).value
+  const isDone = (await results.next()).done
+  
   console.log(`nextResult`, nextResult)
+  console.log(`isDone`, isDone)
 
-  const nextResult2 = (await results.next()).value
-  console.log(`nextResult2`, nextResult2)
 
   /* Or iterate through the results */
   for await (const result of iterateApiPages<Pokemon>(
