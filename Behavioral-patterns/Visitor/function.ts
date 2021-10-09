@@ -23,7 +23,9 @@ interface Pokemon {
   url: string
 }
 
+const visitApiPages = visit<Pokemon[]>(api, (results) => {
+  console.log(results)
+})
+
 // ! uncomment this line to run it 
-// visit<Pokemon[]>(api, (results) => {
-//   console.log(results)
-// })
+// console.log(`visitApiPages`, visitApiPages)

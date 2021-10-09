@@ -1,7 +1,7 @@
 import fetch from 'node-fetch'
 import { api } from '../Visitor/class'
 
-async function* iterateResults<DataType>(url: string) {
+async function* iterateApiPages<DataType>(url: string) {
   let nextUrl: string | undefined = url
 
   do {
@@ -22,12 +22,14 @@ interface Pokemon {
   url: string
 }
 
-(async function () {
-  for await (const result of iterateResults<Pokemon>(api)) {
+const iterator = async function () {
+  for await (const result of iterateApiPages<Pokemon>(api)) {
     console.log(`name`, result.name)
 
     if (result.name === 'bulbasaur') {
       break
     }
   }
-})()
+}
+
+// console.log(`iterator`, iterator())

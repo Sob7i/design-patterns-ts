@@ -27,7 +27,9 @@ interface Pokemon {
 
 const visitor = new VisitAllPages<Pokemon>(api)
 
+const visitApiPages = visitor.visit((results) => {
+  console.log(results)
+})
+
 // ! uncomment this line to run it 
-// visitor.visit((results) => {
-//   console.log(results)
-// })
+// console.log(`visitApiPages`, visitApiPages)
