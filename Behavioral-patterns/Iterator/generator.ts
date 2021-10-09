@@ -1,13 +1,14 @@
 import fetch from 'node-fetch'
-import { api } from '../Visitor/class'
 
-async function* iterateApiPages<DataType>(url: string) {
-  let nextUrl: string | undefined = url
+async function* iterateApiPages<DataType>(
+  url: string,
+): AsyncGenerator<DataType, void, undefined> {
+  let nextUrl: string | null | undefined = url
 
   do {
     const response = await fetch(url)
     const json: {
-      next?: string
+      next?: string | null
       results: DataType[]
     } = await response.json()
 
@@ -15,6 +16,8 @@ async function* iterateApiPages<DataType>(url: string) {
 
     nextUrl = json.next
   } while (nextUrl)
+
+  return
 }
 
 interface Pokemon {
@@ -22,14 +25,14 @@ interface Pokemon {
   url: string
 }
 
-const iterator = async function () {
-  for await (const result of iterateApiPages<Pokemon>(api)) {
-    console.log(`name`, result.name)
+(async function (): Promise<void> {
+  for await (const result of iterateApiPages<Pokemon>(
+    'https://pokeapi.co/api/v2/pokemon/',
+  )) {
+    console.log(`result`, result)
 
-    if (result.name === 'bulbasaur') {
+    if (result.name === 'charmeleon') {
       break
     }
   }
-}
-
-// console.log(`iterator`, iterator())
+})()
