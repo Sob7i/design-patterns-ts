@@ -1,42 +1,55 @@
-import fs from 'fs'
+import { readdirSync, readFileSync } from 'fs'
 
-function createHandlerStack<MessageType>() {
-  const subscribers: Set<(msg: MessageType) => undefined | unknown> = new Set()
+function createHandlers<DataType>(): {
+  register(cb: (msg: DataType) => void): () => void
+  notify(msg: DataType): unknown
+} {
+  const handlers: Set<(msg: DataType) => undefined | unknown> = new Set()
 
   return {
-    subscribe(cb: (msg: MessageType) => void): () => undefined | unknown {
-      subscribers.add(cb)
-      return () => subscribers.delete(cb)
+    register(cb: (msg: DataType) => void): () => void {
+      handlers.add(cb)
+
+      return () => {
+        handlers.delete(cb)
+      }
     },
-    publish(msg: MessageType): undefined | unknown {
+    notify(msg: DataType): unknown | undefined {
       let data: unknown
-      for (const subscriber of Array.from(subscribers)) {
-        data = subscriber(msg)
+
+      for (const handler of Array.from(handlers)) {
+        data = handler(msg)
+
         if (data !== undefined) {
           break
         }
       }
+
       return data
     },
   }
 }
 
-const handlers = createHandlerStack<{
+const handlers = createHandlers<{
   name: string
   content: string
 }>()
 
-handlers.subscribe(({ name, content }) => {
+handlers.register(({ name, content }) => {
   if (name.endsWith('.json')) {
+    console.log('I got notified first')
     return JSON.parse(content)
   }
 })
 
-handlers.subscribe(({ content }) => content)
+handlers.register((msg) => {
+  console.log('I got notified second')
+  return msg
+})
 
-for (const name of fs.readdirSync('./files')) {
-  const content = fs.readFileSync(`./files/${name}`, 'utf8')
-  const output = handlers.publish({ name, content })
+for (const name of readdirSync('./files', 'utf-8')) {
+  const content = readFileSync(`./files/${name}`, 'utf-8')
+  const output = handlers.notify({ name, content })
 
   console.log(`${name}: ${JSON.stringify(output)}`)
 }
