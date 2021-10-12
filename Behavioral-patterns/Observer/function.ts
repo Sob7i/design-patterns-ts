@@ -17,23 +17,11 @@ function createSubscribable<MessageType>() {
   }
 }
 
-const { subscribe, publish } = createSubscribable<string>()
-const unsubFP1 = subscribe(console.log)
-const f = (data: string) => console.log(`I'm a custom sub ${data}`)
+const subscribableFunction = createSubscribable<string>()
 
-subscribe(console.log)
-publish('FP: Hello wold!')
-subscribe(f)
-publish('FP: custom message')
-subscribe(f)()
-publish('FP: Here is another msg')
-unsubFP1()
-publish('FP: This msg is not gonna be published')
+const subscriberFP = (data: string) => console.log(`Custom subscriber ${data}`)
 
-const subFP2 = createSubscribable<number>()
-const unsubFP2 = subFP2.subscribe(console.log)
-subFP2.subscribe(console.log)
-subFP2.publish(1)
-subFP2.publish(5)
-unsubFP2()
-subFP2.publish(10)
+subscribableFunction.subscribe(subscriberFP)
+subscribableFunction.publish('FP: Hello world!')
+subscribableFunction.subscribe(subscriberFP)() // cleanup subscriber
+subscribableFunction.publish('FP: This msg is not gonna be published')
