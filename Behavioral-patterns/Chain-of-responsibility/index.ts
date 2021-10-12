@@ -1,6 +1,6 @@
 import { readdirSync, readFileSync } from 'fs'
 
-function createHandlers<DataType>(): {
+function createHandlersStack<DataType>(): {
   register(cb: (msg: DataType) => void): () => void
   notify(msg: DataType): unknown
 } {
@@ -30,7 +30,7 @@ function createHandlers<DataType>(): {
   }
 }
 
-const handlers = createHandlers<{
+const handlers = createHandlersStack<{
   name: string
   content: string
 }>()
@@ -42,9 +42,9 @@ handlers.register(({ name, content }) => {
   }
 })
 
-handlers.register((msg) => {
+handlers.register(({ content }) => {
   console.log('I got notified second')
-  return msg
+  return content
 })
 
 for (const name of readdirSync('./files', 'utf-8')) {
