@@ -10,7 +10,7 @@ async function* iterateApiPages<DataType>(
     const json: {
       next?: string | null
       results: DataType[]
-    } | any = await response.json()
+    } = await response.json()
 
     yield* json.results
 
