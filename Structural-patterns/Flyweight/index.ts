@@ -24,7 +24,7 @@ function makeURLFlyweights<ReturnType>(
 
   return new Proxy(originalObject, {
     get: (target, name: string) => {
-      console.log(`Fetching ${name} ${urls[name]}`)
+      console.log(`Fetching ${name}: ${urls[name]}`)
 
       if (!target[name]) {
         target[name] = fetch(urls[name]).then((res) => res.json())
