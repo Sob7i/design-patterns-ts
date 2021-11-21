@@ -1,11 +1,11 @@
 import { readdirSync, readFileSync } from 'fs'
 
-interface HandlerStack<DataType> {
+interface HandlersStack<DataType> {
   register(cb: (msg: DataType) => void): () => void
   notify(msg: DataType): unknown
 }
 
-function createHandlersStack<DataType>(): HandlerStack<DataType> {
+function createHandlersStack<DataType>(): HandlersStack<DataType> {
   const handlers: Set<(msg: DataType) => undefined | unknown> = new Set()
 
   return {
@@ -16,7 +16,7 @@ function createHandlersStack<DataType>(): HandlerStack<DataType> {
         handlers.delete(cb)
       }
     },
-    notify(msg: DataType): unknown | undefined {
+    notify(msg: DataType): unknown {
       let data: unknown
 
       for (const handler of Array.from(handlers)) {
