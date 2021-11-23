@@ -1,5 +1,7 @@
 import fetch from 'node-fetch'
 
+const pokemonsApi = 'https://pokeapi.co/api/v2/pokemon/'
+
 interface Pokemon {
   species: {
     name: string
@@ -17,9 +19,7 @@ interface PokemonList {
   }[]
 }
 
-function makeURLFlyweights<ReturnType>(
-  urls: Record<string, string>,
-) {
+function makeURLFlyweights<ReturnType>(urls: Record<string, string>) {
   const originalObject: Record<string, Promise<ReturnType>> = {}
 
   return new Proxy(originalObject, {
@@ -35,9 +35,7 @@ function makeURLFlyweights<ReturnType>(
 }
 
 ;(async () => {
-  const pokemons = (await (
-    await fetch('https://pokeapi.co/api/v2/pokemon/')
-  ).json()) as PokemonList
+  const pokemons = (await (await fetch(pokemonsApi)).json()) as PokemonList
 
   const urls = pokemons.results.reduce(
     (acc, { name, url }) => ({
@@ -48,6 +46,6 @@ function makeURLFlyweights<ReturnType>(
   )
 
   const flyweight = makeURLFlyweights<Pokemon>(urls)
-  const bulbasaur = flyweight.bulbasaur
-  console.log(`bulbasaur`, bulbasaur)
+  const bulbasaur = await flyweight.bulbasaur
+  console.log(`bulbasaur`, bulbasaur.species)
 })()
