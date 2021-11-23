@@ -37,7 +37,7 @@ function makeURLFlyweights<ReturnType>(urls: Record<string, string>) {
 ;(async () => {
   const pokemons = (await (await fetch(pokemonsApi)).json()) as PokemonList
 
-  const urls = pokemons.results.reduce(
+  const urls: Record<string, string> = pokemons.results.reduce(
     (acc, { name, url }) => ({
       ...acc,
       [name]: url,
