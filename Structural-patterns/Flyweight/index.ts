@@ -22,16 +22,21 @@ interface PokemonList {
 function makeURLFlyweights<ReturnType>(urls: Record<string, string>) {
   const originalObject: Record<string, Promise<ReturnType>> = {}
 
-  return new Proxy(originalObject, {
-    get: (target, name: string) => {
+  // The Proxy object enables you to create a proxy for another object,
+  // which can intercept and redefine fundamental operations for that object.
+  const handler = {
+    get: (target: Record<string, Promise<ReturnType>>, name: string) => {
       console.log(`Fetching ${name}: ${urls[name]}`)
 
       if (!target[name]) {
         target[name] = fetch(urls[name]).then((res) => res.json())
       }
+
       return target[name]
     },
-  })
+  }
+  
+  return new Proxy(originalObject, handler)
 }
 
 ;(async () => {
